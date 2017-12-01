@@ -94,10 +94,11 @@ main :: IO ()
 main = do
   (Run inFile outFile) <- execParser opts
   sh $ do
-    srcfolder <- using (mktempdir "/tmp" "dbcflatten-source")
-    _ <- procStrict "unzip" [format fp infile, "-d", format fp srcfolder] mempty
+    srcFolder <- using (mktempdir "/tmp" "dbcflatten-source")
+    _ <- procStrict "unzip" [format fp inFile, "-d", format fp srcFolder] mempty
     sh $ do
       resultFolder <- using (mktempdir "/tmp" "dbcflatten-result")
+      cptree srcFolder resultFolder
       sh $ do
         srcFile <- find isSourceFile srcFolder
         liftIO $ print srcFile
